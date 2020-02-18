@@ -1,10 +1,10 @@
 #!/bin/bash
 
 PREFIX="nfcore/rnafusion"
+VERSION="dev"
 
 create_container() {
     TOOL_PATH=$1
-    VERSION="$(cat $TOOL_PATH/environment.yml | grep "name:" | cut -d":" -f2 | cut -d " " -f2)"
     CONTAINER_NAME="$PREFIX:$VERSION"
     echo "Building [$CONTAINER_NAME]"
     docker build $TOOL_PATH -t $CONTAINER_NAME
@@ -32,7 +32,7 @@ if [ $1 == "all" ]; then
     for TOOL in */; do
         create_container `pwd`/$TOOL ${TOOL%?}
     done
-    # Build main cotainer
+    # Build main container
     VERSION="$(cat ../nextflow.config | grep "container" | cut -d":" -f2 | cut -d "'" -f1)"
     CONTAINER_NAME=$PREFIX:$VERSION
     echo "Building [$CONTAINER_NAME]"

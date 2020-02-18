@@ -1,6 +1,7 @@
-name: fusioncatcher_v1.20
+name: rnafusion-fusioncatcher-dev
 channels:
-  - bioconda
   - conda-forge
+  - bioconda
+  - defaults
 dependencies:
   - bioconda::fusioncatcher=1.20

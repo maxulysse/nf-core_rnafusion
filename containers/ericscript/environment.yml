@@ -1,0 +1,7 @@
+name: rnafusion-ericscript-dev
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - ericscript=0.5.5

@@ -87,7 +87,7 @@ checkHostname()
 */
 
 process download_base {
-    publishDir "${params.outdir}/", mode: 'move'
+    publishDir "${params.outdir}/", mode: 'copy'
     
     output:
     file "Homo_sapiens.GRCh38_r${params.reference_release}.all.fa" into fasta
@@ -106,7 +106,7 @@ process download_base {
 }
 
 process download_arriba {
-    publishDir "${params.outdir}/arriba", mode: 'move'
+    publishDir "${params.outdir}/arriba", mode: 'copy'
     
     when:
     params.arriba || params.download_all
@@ -123,7 +123,7 @@ process download_arriba {
 
 process download_star_fusion {
     label 'process_high'
-    publishDir "${params.outdir}/star-fusion", mode: 'move'
+    publishDir "${params.outdir}/star-fusion", mode: 'copy'
     
     when:
     params.star_fusion || params.download_all
@@ -136,7 +136,7 @@ process download_star_fusion {
     file '*'
 
     script:
-    """    
+    """
     wget -N ftp://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz
     gunzip Pfam-A.hmm.gz && hmmpress Pfam-A.hmm
 
@@ -149,20 +149,20 @@ process download_star_fusion {
     wget https://www.dfam.org/releases/Dfam_3.1/infrastructure/dfamscan/homo_sapiens_dfam.hmm.h3m
     wget https://www.dfam.org/releases/Dfam_3.1/infrastructure/dfamscan/homo_sapiens_dfam.hmm.h3p
 
+    export TMPDIR=/tmp
     prep_genome_lib.pl \\
         --genome_fa ${fasta} \\
         --gtf ${gtf} \\
+        --annot_filter_rule /opt/conda/envs/star-fusion_v1.6.0/ctat-genome-lib-builder-2830cd708c5bb9353878ca98069427e83acdd625/AnnotFilterRuleLib/AnnotFilterRule.pm \\
         --fusion_annot_lib CTAT_HumanFusionLib.dat.gz \\
-        --annot_filter_rule AnnotFilterRule.pm \\
         --pfam_db Pfam-A.hmm \\
         --dfam_db homo_sapiens_dfam.hmm \\
-        --human_gencode_filter \\
         --CPU ${task.cpus}
     """
 }
 
 process download_fusioncatcher {
-    publishDir "${params.outdir}/fusioncatcher", mode: 'move'
+    publishDir "${params.outdir}/fusioncatcher", mode: 'copy'
     
     when:
     params.fusioncatcher || params.download_all
@@ -182,7 +182,7 @@ process download_fusioncatcher {
 }
 
 process download_ericscript {
-    publishDir "${params.outdir}/ericscript", mode: 'move'
+    publishDir "${params.outdir}/ericscript", mode: 'copy'
     
     when:
     params.ericscript || params.download_all
@@ -201,7 +201,7 @@ process download_ericscript {
 }
 
 process download_databases {
-    publishDir "${params.outdir}/databases", mode: 'move'
+    publishDir "${params.outdir}/databases", mode: 'copy'
 
     output:
     file '*'

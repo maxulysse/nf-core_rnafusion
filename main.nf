@@ -336,7 +336,7 @@ process arriba {
     when: params.arriba && (!params.single_end || params.debug)
 
     script:
-    def extra_params = params.arriba_opt ? params.arriba_opt : ''
+    extra_params = params.arriba_opt ?: ''
     """
     STAR \\
         --genomeDir ${star_index} \\
@@ -400,7 +400,7 @@ process star_fusion {
     script:
     def avail_mem = task.memory ? "--limitBAMsortRAM ${task.memory.toBytes() - 100000000}" : ''
     option = params.single_end ? "--left_fq ${reads[0]}" : "--left_fq ${reads[0]} --right_fq ${reads[1]}"
-    def extra_params = params.star_fusion_opt ? params.star_fusion_opt : ''
+    extra_params = params.star_fusion_opt ?: ''
     """
     STAR \\
         --genomeDir ${star_index} \\
@@ -465,7 +465,7 @@ process fusioncatcher {
 
     script:
     option = params.single_end ? reads[0] : "${reads[0]},${reads[1]}"
-    def extra_params = params.fusioncatcher_opt ? params.fusioncatcher_opt : ''
+    extra_params = params.fusioncatcher_opt ?: ''
     """
     fusioncatcher.py \\
         -d ${data_dir} \\
@@ -646,7 +646,7 @@ process summary {
     
 
     script:
-    def extra_params = params.fusion_report_opt ? params.fusion_report_opt : ''
+    extra_params = params.fusion_report_opt ?: ''
     def tools = !arriba.empty() ? "--arriba ${arriba} " : ''
     tools += !ericscript.empty() ? "--ericscript ${ericscript} " : ''
     tools += !fusioncatcher.empty() ? "--fusioncatcher ${fusioncatcher} " : ''
@@ -724,7 +724,7 @@ process fusion_inspector {
     when: params.fusion_inspector && (!params.single_end || params.debug)
 
     script:
-    def extra_params = params.fusion_inspector_opt ? params.fusion_inspector_opt : ''
+    extra_params = params.fusion_inspector_opt ?: ''
     """
     FusionInspector \\
         --fusions ${fi_input_list} \\
